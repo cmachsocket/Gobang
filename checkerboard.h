@@ -13,6 +13,7 @@
 #define TARGET_DEP 5
 #define SCALE 2
 #define TIME_LOSE 10
+#define MAX_SCORE 5
 
 #define MAX_DIRECT 4
 #define EMPTY_NUM 100
@@ -45,6 +46,8 @@ private:
     checkerboard();
 
     static int alpha_beta(int, int, int, int, int, int);
+
+    inline static int clac_single_pos(int x, int y, int i,int ply);
 
     static int empty_extend(int, int, int, int);
 

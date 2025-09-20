@@ -4,7 +4,6 @@
 
 #include<QMessageBox>
 #include<QDebug>
-#include<QOverload>
 #include <QVariant>
 
 QPushButton *MainWindow::buttons[MAX_ROW + 5][MAX_COL + 5];

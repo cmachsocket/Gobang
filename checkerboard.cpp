@@ -116,7 +116,7 @@ int checkerboard::alpha_beta(int x, int y, int alph, int beta, int depth, int is
     //assert(alph!=1);
     //assert(board[5][10]==0);
     if (is_game_over(x, y)) {
-        return -is_max * scores[5] * TIME_LOSE;
+        return -is_max * scores[MAX_SCORE] * TIME_LOSE;
     }
     if (depth >= TARGET_DEP) {
         return G_evaluate();
@@ -165,27 +165,30 @@ int checkerboard::alpha_beta(int x, int y, int alph, int beta, int depth, int is
     }
 }
 
+inline int checkerboard::clac_single_pos(int x, int y, int i,int ply) {
+    int tri_count=0,ans=0;
+    int tmp = clac_extend(i, x, y, ply);
+    if (tmp >= 4)tri_count++;
+    ans += scores[tmp];
+    if (tri_count > 1)ans += scores[MAX_SCORE];
+    return ans;
+}
+
 int checkerboard::G_evaluate() {
     int ans = 0;
     for (int x = 0; x < MAX_ROW; x++) {
         for (int y = 0; y < MAX_COL; y++) {
             if (put_chess_valid(x, y)) {
                 for (int i = 1; i <= MAX_DIRECT; i++) {
-                    int tri_count1 = 0, tri_count2 = 0;
-                    int tmp = clac_extend(i, x, y, -person_player);
-                    if (tmp >= 4)tri_count1++;
-                    ans += scores[tmp];
-                    tmp = clac_extend(i, x, y, person_player);
-                    if (tmp >= 4)tri_count2++;
-                    ans -= scores[tmp];
-                    if (tri_count1 > 1)ans += scores[5];
-                    if (tri_count2 > 1)ans -= scores[5];
+                    ans+=clac_single_pos( x, y, i,-person_player);
+                    ans-=clac_single_pos( x, y, i,person_player);
                 }
             }
         }
     }
     return ans;
 }
+
 
 int checkerboard::clac_extend(int direct, int x, int y, int ply) {
     int count = 0, empty_tot = 0;
