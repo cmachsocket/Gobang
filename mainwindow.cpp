@@ -99,7 +99,9 @@ void MainWindow::try_add_chess(int id) {
         //状态监视
         _status->setText("对方下棋中");
     } else {
-        enable_buttons();
+        //enable_buttons();
+        QFuture<std::pair<int, int> > future = QtConcurrent::run(checkerboard::solve_find, row, col);
+        watcher->setFuture(future);
         _status->setText("我方回合");
     }
     checkerboard::change_player();

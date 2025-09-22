@@ -126,11 +126,8 @@ int checkerboard::alpha_beta(int x, int y, int alph, int beta, int depth, int is
         for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
                 if (access[i][j] and put_chess_valid(i, j)) {
-                    add_chess(i, j, -person_player);
-                    //is_max=!is_max;depth++;
+                    add_chess(i, j, player);
                     int tmp = alpha_beta(i, j, alph, beta, depth + 1, -is_max);
-                    //if (depth == 1)
-                        //qDebug() << tar_x << tar_y << alph << tmp << i << j;
                     if (tmp > alph) {
                         alph = tmp;
 
@@ -138,9 +135,7 @@ int checkerboard::alpha_beta(int x, int y, int alph, int beta, int depth, int is
                             tar_x = i, tar_y = j;
                         }
                     }
-                    //alph = std::max(alph, );
-                    //is_max=!is_max;depth--;
-                    del_chess(i, j, -person_player);
+                    del_chess(i, j, player);
                 }
                 if (alph >= beta) break;
             }
@@ -151,11 +146,11 @@ int checkerboard::alpha_beta(int x, int y, int alph, int beta, int depth, int is
         for (int i = 0; i < MAX_ROW; i++) {
             for (int j = 0; j < MAX_COL; j++) {
                 if (access[i][j] and put_chess_valid(i, j)) {
-                    add_chess(i, j, person_player);
+                    add_chess(i, j, -player);
                     //is_max=!is_max;depth++;
                     beta = std::min(beta, alpha_beta(i, j, alph, beta, depth + 1, -is_max));
                     //is_max=!is_max;depth--;
-                    del_chess(i, j, person_player);
+                    del_chess(i, j, -player);
                 }
                 if (alph >= beta) break;
             }
@@ -180,8 +175,8 @@ int checkerboard::G_evaluate() {
         for (int y = 0; y < MAX_COL; y++) {
             if (put_chess_valid(x, y)) {
                 for (int i = 1; i <= MAX_DIRECT; i++) {
-                    ans+=clac_single_pos( x, y, i,-person_player);
-                    ans-=clac_single_pos( x, y, i,person_player);
+                    ans+=clac_single_pos( x, y, i,player);
+                    ans-=clac_single_pos( x, y, i,-player);
                 }
             }
         }
